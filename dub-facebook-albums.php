@@ -3,7 +3,7 @@
 	/*
 	Plugin Name: DUB Facebook Albums
 	Description: Displays public Photos and Albums from a specified Facebook page.
-	Version: 0.1.0
+	Version: 0.1.1
 	Author: DUB Tools
 	Author URI: http://www.dubtools.com/
 	License: GPLv2 or later
@@ -465,7 +465,7 @@
 		$dub_fa_settings = get_option('dub_fa_settings');
 		
 		//Schedule the update...
-		wp_schedule_event(time(), $dub_fa_settings['dub_fa_cron'], 'dub_fa_update_albums');
+		wp_schedule_event(current_time('timestamp'), $dub_fa_settings['dub_fa_cron'], 'dub_fa_update_albums');
 		
 	}
 	
