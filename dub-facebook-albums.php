@@ -3,7 +3,7 @@
 	/*
 	Plugin Name: DUB Facebook Albums
 	Description: Displays public Photos and Albums from a specified Facebook page.
-	Version: 0.1.1
+	Version: 0.1.2
 	Author: DUB Tools
 	Author URI: http://www.dubtools.com/
 	License: GPLv2 or later
@@ -407,7 +407,7 @@
 			if (!empty($dub_fa_settings['dub_fa_user_id'])) {
 				
 				//Create the JSON request URL (sanitize the User ID again just to be sure) - (add an extra 3 albums so we can remove the system albums below)...
-				$dub_fa_json_url = 'http://graph.facebook.com/' . preg_replace("/[^A-Za-z0-9]/", '', $dub_fa_settings['dub_fa_user_id']) . '/albums?fields=photos.limit(' . preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_album_count']) . ').fields(source,picture,id),name,id,type&limit=' . (preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_photo_count']) + 3);
+				$dub_fa_json_url = 'http://graph.facebook.com/' . preg_replace("/[^A-Za-z0-9]/", '', $dub_fa_settings['dub_fa_user_id']) . '/albums?fields=photos.limit(' . preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_photo_count']) . ').fields(source,picture,id),name,id,type&limit=' . (preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_album_count']) + 3);
 				
 				//Start a collection of requests...
 				$dub_fa_requests = array();
@@ -417,12 +417,18 @@
 				
 				//Start a list of albums...
 				$dub_fa_albums = array();
+				
+				//Start a count of albums...
+				$dub_fa_album_count = 0;
 					
 				//For each album in the request...
 				foreach($dub_fa_request['data'] as $album_index => $album_value) {
 					
-					//If this album isn't one of the system albums...
-					if (!in_array($album_value['type'], array('wall', 'friends_walls', 'profile'))) {
+					//If this album isn't one of the system albums, and it's still under the limit...
+					if (!in_array($album_value['type'], array('wall', 'friends_walls', 'profile')) && $dub_fa_album_count < preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_album_count'])) {
+						
+						//Increase the counter...
+						$dub_fa_album_count ++;
 						
 						//Start a list of photos...
 						$dub_fa_photos = array();
