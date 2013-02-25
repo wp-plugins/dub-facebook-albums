@@ -3,7 +3,7 @@
 	/*
 	Plugin Name: DUB Facebook Albums
 	Description: Displays public Photos and Albums from a specified Facebook page.
-	Version: 0.1.2
+	Version: 0.1.3
 	Author: DUB Tools
 	Author URI: http://www.dubtools.com/
 	License: GPLv2 or later
@@ -424,8 +424,8 @@
 				//For each album in the request...
 				foreach($dub_fa_request['data'] as $album_index => $album_value) {
 					
-					//If this album isn't one of the system albums, and it's still under the limit...
-					if (!in_array($album_value['type'], array('wall', 'friends_walls', 'profile')) && $dub_fa_album_count < preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_album_count'])) {
+					//If this album isn't empty, and isn't one of the system albums, and it's still under the limit...
+					if (!empty($album_value['photos']['data']) && !in_array($album_value['type'], array('wall', 'friends_walls', 'profile')) && $dub_fa_album_count < preg_replace("/[^0-9]/", '', $dub_fa_settings['dub_fa_album_count'])) {
 						
 						//Increase the counter...
 						$dub_fa_album_count ++;
